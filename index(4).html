@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<!-- PWA -->
+<link rel="manifest" href="/VM-by-Bushido-Brown/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VM 2026 by Bushido Brown">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VM 2026 by Bushido Brown VM 2026 by Bushido Brown</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+--gold: #e0c97f;
+--gold-dark: #b89f50;
+--green: #0f3460;
+--bg: #16213e;
+--bg2: #1a1a2e;
+--bg3: rgba(26, 26, 46, 0.88);
+--border: rgba(224,201,127,0.18);
+--text: #fff;
+--text2: #c8b97a;
+--blue: #e0c97f;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+font-family: 'Barlow', sans-serif;
+background-color: #12122a;
+background-image: linear-gradient(rgba(18,18,42,0.82), rgba(18,18,42,0.82)), url('bakgrund.png');
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+color: var(--text);
+min-height: 100vh;
+}
+header { position: sticky; top: 0; background: rgba(22,33,62,0.88); backdrop-filter: blur(10px); padding: 14px 20px; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.logo-wrap { position: absolute; left: 50%; transform: translateX(-50%); text-align: center; pointer-events: none; }
+@media (max-width: 640px) {
+  .logo-wrap { position: static; transform: none; width: 100%; order: -1; margin-bottom: 4px; }
+  header { justify-content: flex-end; }
+}
+.logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 24px; color: var(--gold); letter-spacing: 0.04em; text-shadow: 0 0 12px rgba(89,213,255,0.35); }
+.header-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.user-badge { font-size: 13px; color: var(--gold); background: rgba(89,213,255,0.10); border: 1px solid rgba(89,213,255,0.25); border-radius: 20px; padding: 4px 12px; display: none; }
+nav { background: var(--bg3); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+nav::-webkit-scrollbar { display: none; }
+.nav-inner { display: flex; gap: 2px; padding: 6px 12px; white-space: nowrap; }
+nav button { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.05em; padding: 6px 14px; border: none; background: transparent;
+color: var(--text2); cursor: pointer; border-radius: 6px; transition: all 0.15s; }
+nav button:hover { color: var(--text); background: rgba(89,213,255,0.08); }
+nav button.active { color: var(--gold); background: rgba(89,213,255,0.10); }
+.container { max-width: 1200px; margin: 0 auto; padding: 24px 20px 80px; }
+.page { display: none; }
+.page.active { display: block; }
+#page-final.active {
+display: flex;
+flex-direction: column;
+min-height: calc(100vh - 260px);
+}
+.page-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px; color: var(--gold); margin-bottom: 4px; text-shadow: 0 0 10px rgba(89,213,255,0.30) }
+.page-sub { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+.match-card { background: var(--bg3); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 8px; overflow: hidden; }
+.match-row { padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
+.match-info { flex: 1; min-width: 0; }
+.match-teams { font-size: 14px; font-weight: 600; }
+.match-teams img { vertical-align: middle; margin-right: 3px; border-radius: 2px; }
+.match-meta { font-size: 11px; color: var(--text2); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 8px; }
+.meta-item { display: flex; align-items: center; gap: 3px; }
+.score-inputs { display: flex; align-items: center; gap: 5px; }
+.score-inputs input { width: 40px; height: 36px; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; background: var(--bg); color: var(--gold);
+border: 1px solid rgba(89,213,255,0.28); border-radius: 6px; }
+.date-divider { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; color: var(--gold); margin: 20px 0 10px 5px; font-size: 18px;
+border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+.footer { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(22,33,62,0.88); backdrop-filter: blur(10px); border-top: 1px solid var(--border);
+padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 99; }
+.btn { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; padding: 8px 18px; border-radius: 8px; cursor: pointer;
+border: 1px solid var(--blue); background: transparent; color: var(--blue); }
+.btn.primary { background: var(--gold); color: #04131d; border-color: var(--gold); }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; align-items: center; justify-content: center; z-index: 9999; }
+.modal.open { display: flex; }
+.modal-content { width: 100%; max-width: 420px; background: var(--bg3); border-radius: 20px; padding: 28px; }
+.modal-form-toggle { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+.modal-form-toggle span { cursor: pointer; color: var(--text2); font-weight: 600; }
+.modal-form-toggle span.active { color: var(--gold); border-bottom: 2px solid var(--gold); }
+.input-field { width: 100%; margin: 6px 0; padding: 10px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; }
+.toast { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); color: white; padding: 9px 22px; border-radius: 30px; opacity: 0;
+transition: 0.3s; z-index: 200; }
+.toast.show { opacity: 1; }
+.toast.success { background: #22c55e; }
+.toast.error { background: #ef4444; }
+.loading { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 500; }
+.loading.hidden { display: none; }
+.final-trophy-wrapper {
+flex: 1;
+display: flex;
+flex-direction: column;
+justify-content: flex-end;
+align-items: center;
+margin: 20px 0 30px 0;
+gap: 16px;
+}
+.final-trophy {
+max-width: 380px;
+width: 100%;
+height: auto;
+border-radius: 24px;
+border: 1px solid rgba(89,213,255,0.08);
+box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 40px rgba(89,213,255,0.08);
+}
+.winner-label {
+font-family: 'Barlow Condensed', sans-serif;
+font-size: 13px;
+color: var(--text2);
+letter-spacing: 0.08em;
+text-transform: uppercase;
+margin-bottom: 4px;
+text-align: center;
+}
+.winner-input {
+background: transparent;
+border: none;
+border-bottom: 2px solid rgba(89,213,255,0.4);
+color: var(--gold);
+font-family: 'Barlow Condensed', sans-serif;
+font-size: 22px;
+font-weight: 700;
+text-align: center;
+width: 260px;
+padding: 4px 8px;
+letter-spacing: 0.05em;
+}
+.winner-input::placeholder {
+color: rgba(89,213,255,0.3);
+}
+.score-inputs input::-webkit-outer-spin-button,
+.score-inputs input::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+.score-inputs input[type=number] {
+-moz-appearance: textfield;
+}
+.group-section {
+margin-bottom: 24px;
+}
+.group-label {
+font-family: 'Barlow Condensed', sans-serif;
+font-size: 16px;
+font-weight: 700;
+color: var(--gold);
+margin-bottom: 8px;
+letter-spacing: 0.05em;
+}
+.group-table {
+width: 100%;
+border-collapse: collapse;
+font-family: 'Barlow Condensed', sans-serif;
+font-size: 14px;
+background: var(--bg3);
+border-radius: 10px;
+overflow: hidden;
+border: 1px solid var(--border);
+}
+.group-table thead tr {
+background: rgba(89,213,255,0.08);
+color: var(--text2);
+font-size: 12px;
+letter-spacing: 0.05em;
+}
+.group-table th, .group-table td {
+padding: 8px 6px;
+text-align: center;
+}
+.group-table {
+    width: 100%;
+    table-layout: fixed;
+}
+.group-table th:nth-child(2),
+.group-table td:nth-child(2) {
+    text-align: left;
+    padding-left: 8px;
+    width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.group-table tbody tr {
+border-top: 1px solid var(--border);
+color: var(--text);
+}
+.group-table tbody tr:nth-child(-n+2) td:first-child {
+border-left: 3px solid var(--gold);
+}
+.group-table .pts {
+font-weight: 700;
+color: var(--gold);
+}
+.bonus-row {
+display: flex;
+flex-direction: column;
+gap: 6px;
+margin-bottom: 20px;
+}
+.bonus-row:last-child {
+margin-bottom: 0;
+}
+.bonus-row label {
+font-family: 'Barlow Condensed', sans-serif;
+font-size: 15px;
+color: var(--text2);
+}
+.bonus-row input {
+background: transparent;
+border: none;
+border-bottom: 1px dashed rgba(89,213,255,0.4);
+color: #fff;
+font-family: 'Barlow Condensed', sans-serif;
+font-size: 16px;
+padding: 4px 4px;
+width: 220px;
+}
+.bonus-row input::placeholder {
+color: rgba(89,213,255,0.3);
+}
+.admin-table-input {
+width: 38px;
+height: 28px;
+background: rgba(89,213,255,0.05);
+border: 1px solid rgba(89,213,255,0.25);
+color: var(--gold);
+text-align: center;
+font-family: 'Barlow Condensed', sans-serif;
+font-size: 15px;
+font-weight: 700;
+border-radius: 4px;
+padding: 0;
+}
+.admin-table-input::-webkit-outer-spin-button,
+.admin-table-input::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+.admin-table-input[type=number] {
+-moz-appearance: textfield;
+}
+@media (max-width: 480px) {
+  .match-row { flex-wrap: wrap; }
+  .match-info { width: 100%; }
+  .score-inputs { margin-left: auto; margin-top: 6px; }
+}
+</style>
+</head>
+<body>
+<div class="loading" id="loading">
+<div style="display:flex;flex-direction:column;align-items:center;line-height:1.15;gap:4px;">
+<span style="font-family:'Barlow Condensed',sans-serif;font-weight:400;font-size:14px;color:rgba(169,199,216,0.85);letter-spacing:0.18em;text-transform:uppercase;">VM 2026 by Bushido Brown</span>
+<span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:40px;color:#59D5FF;letter-spacing:0.04em;text-shadow:0 0 24px rgba(89,213,255,0.25),0 0 50px rgba(89,213,255,0.12);">VM-TIPS 2026</span>
+</div>
+</div>
+<header>
+<div class="logo-wrap">
+<div class="logo" style="display:flex;flex-direction:column;align-items:center;line-height:1.1;gap:1px;">
+<span style="font-family:'Barlow Condensed',sans-serif;font-weight:400;font-size:clamp(9px,1vw,12px);color:rgba(89,213,255,0.85);letter-spacing:0.18em;text-transform:uppercase;display:block;">VM 2026 by Bushido Brown</span>
+<span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(18px,2.5vw,28px);color:#59D5FF;letter-spacing:0.04em;text-shadow:0 0 18px rgba(89,213,255,0.25),0 0 40px rgba(89,213,255,0.12);display:block;">VM-TIPS 2026</span>
+</div>
+</div>
+<div class="header-right">
+<span class="user-badge" id="userBadge"></span>
+<button class="btn" id="loginBtn" onclick="openModal('authModal')">Logga in / Registrera</button>
+<button class="btn danger" id="logoutBtn" onclick="doLogout()" style="display:none">Logga ut</button>
+</div>
+</header>
+<nav>
+<div class="nav-inner">
+<button id="nav-topplista" onclick="showPage('topplista', this)">   🏆    Topplista</button>
+<button id="nav-grupptabell" onclick="showPage('grupptabell', this)"> Grupptabeller</button>
+<button id="nav-groups" class="active" onclick="showPage('groups', this)">Gruppspelsmatcher</button>
+<button id="nav-r16" onclick="showPage('r16', this)">16-delsfinaler</button>
+<button id="nav-qf" onclick="showPage('qf', this)">Åttondelsfinaler</button>
+<button id="nav-qf2" onclick="showPage('qf2', this)">Kvartsfinaler</button>
+<button id="nav-semi" onclick="showPage('semi', this)">Semifinaler</button>
+<button id="nav-bronze" onclick="showPage('bronze', this)">Bronsmatch</button>
+<button id="nav-final" onclick="showPage('final', this)">VM-Final</button>
+<button id="nav-bonus" onclick="showPage('bonus', this)">   ⭐    Bonus & Tiebreak</button>
+</div>
+</nav>
+<div class="container">
+<div class="page active" id="page-groups">
+<div class="page-title">Gruppspelsmatcher</div>
+<div class="page-sub">72 matcher Låses kl. 21:00 den 11 juni </div>
+<div id="schedule-grid"></div>
+</div>
+<div class="page" id="page-r16">
+<div class="page-title">16-delsfinaler</div>
+<div id="schedule-r16-grid"></div>
+</div>
+<div class="page" id="page-qf">
+<div class="page-title">Åttondelsfinaler</div>
+<div id="schedule-qf-grid"></div>
+</div>
+<div class="page" id="page-qf2">
+<div class="page-title">Kvartsfinaler</div>
+<div id="schedule-qf2-grid"></div>
+</div>
+<div class="page" id="page-semi">
+<div class="page-title">Semifinaler</div>
+<div id="schedule-semi-grid"></div>
+</div>
+<div class="page" id="page-bronze">
+<div class="page-title">Bronsmatch</div>
+<div id="schedule-bronze-grid"></div>
+</div>
+<div class="page" id="page-final">
+<div>
+<div class="page-title">VM-Final 2026</div>
+<div id="schedule-final-grid"></div>
+</div>
+<div class="final-trophy-wrapper">
+<div>
+<div class="winner-label">   🏆    VM-vinnare</div>
+<input type="text" class="winner-input" id="winnerInput"
+placeholder="Din VM-vinnare?"
+onchange="updateSlutspelTeam('winner','teamH',this.value)">
+</div>
+<img src="pokal.png" alt="FIFA World Cup Trophy" class="final-trophy">
+</div>
+</div>
+<div class="page" id="page-topplista">
+<div class="page-title">Topplista</div>
+<div class="page-sub">Deltagarnas resultat</div>
+<div id="topplista-grid">
+<p style="color:var(--text2); font-size:14px;">Laddar topplista...</p>
+</div>
+</div>
+<div class="page" id="page-grupptabell">
+<div class="page-title">Grupptabeller</div>
+<div class="page-sub">Uppdateras efter varje spelomgång</div>
+<div id="grupptabell-grid">
+<p style="color:var(--text2); font-size:14px;">Laddar grupptabell...</p>
+</div>
+</div>
+<div class="page" id="page-bonus">
+<div class="page-title">Bonus & Tiebreak</div>
+<div class="page-sub">Låses kl. 21:00 den 11 juni</div>
+<div class="page-title" style="font-size:18px; margin-top:8px;">Bonusfrågor</div>
+<div class="match-card" style="padding:16px;">
+<div class="bonus-row">
+<label>   🥇    Turneringens skyttekung</label>
+<input type="text" id="bonus_skyttekung" placeholder="Spelarens namn..."
+onchange="saveBonus('skyttekung', this.value)">
+</div>
+<div class="bonus-row">
+<label>   ⚽    Laget med flest m   å   l i gruppspelet</label>
+<input type="text" id="bonus_flest_mal" placeholder="Lag..."
+onchange="saveBonus('flest_mal', this.value)">
+</div>
+<div class="bonus-row">
+<label>   🟨    Laget med flest gula kort</label>
+<input type="text" id="bonus_gula_kort" placeholder="Lag..."
+onchange="saveBonus('gula_kort', this.value)">
+</div>
+<div class="bonus-row">
+<label>   🟥    Laget med flest röda kort</label>
+<input type="text" id="bonus_roda_kort" placeholder="Lag..."
+onchange="saveBonus('roda_kort', this.value)">
+</div>
+<div class="bonus-row">
+<label>   🚨    Laget som släpper in flest mål i gruppspelet</label>
+<input type="text" id="bonus_flest_inslapp" placeholder="Lag..."
+onchange="saveBonus('flest_inslapp', this.value)">
+</div>
+</div>
+<div class="page-title" style="font-size:18px; margin-top:24px;">Utslagsfrågor</div>
+<div class="page-sub">Används vid lika poäng i slutet</div>
+<div class="match-card" style="padding:16px;">
+<div class="bonus-row">
+<label>   ⏱️    I vilken minut görs det sista målet i VM-finalen?</label>
+<input type="number" id="bonus_sista_mal" placeholder="Minut..."
+onchange="saveBonus('sista_mal', this.value)">
+</div>
+<div class="bonus-row">
+<label>   🌍    Hur många mål görs det totalt under hela turneringen?</label>
+<input type="number" id="bonus_total_mal" placeholder="Antal mål..."
+onchange="saveBonus('total_mal', this.value)">
+</div>
+</div>
+</div>
+<div class="footer">
+<div id="footer-stats">Logga in för att spara</div>
+<button class="btn primary" onclick="saveTips()">Spara tips</button>
+</div>
+<div class="modal" id="authModal">
+<div class="modal-content">
+<div class="modal-form-toggle">
+<span id="tab-login" class="active" onclick="switchAuthTab('login')">Logga in</span>
+<span id="tab-register" onclick="switchAuthTab('register')">Registrera dig</span>
+</div>
+<div id="auth-common-fields">
+<input type="text" id="authUsername" placeholder="Användarnamn" class="input-field">
+<input type="password" id="authPassword" placeholder="Lösenord" class="input-field">
+</div>
+<div id="auth-register-fields" style="display: none;">
+<input type="text" id="regFirstName" placeholder="Förnamn" class="input-field">
+<input type="text" id="regLastName" placeholder="Efternamn" class="input-field">
+<input type="text" id="regUsername" placeholder="Användarnamn (synligt för alla)" class="input-field">
+</div>
+<div style="margin-top: 15px; display:flex; gap:10px;">
+<button class="btn primary" id="authSubmitBtn" onclick="submitAuth()">Logga in</button>
+<button class="btn" onclick="closeModal('authModal')">Stäng</button>
+</div>
+</div>
+</div>
+<div id="toast" class="toast"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, getDocs, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {
+apiKey: "AIzaSyAiU-b9TxCauF1HjAxmmja3QcqA0idILIA",
+authDomain: "vm-2026-by-bushido-brown.firebaseapp.com",
+projectId: "vm-2026-by-bushido-brown",
+storageBucket: "vm-2026-by-bushido-brown.firebasestorage.app",
+messagingSenderId: "455999705720",
+appId: "1:455999705720:web:42f745fbfa4fc909f9538d"
+};
+const fbApp = initializeApp(firebaseConfig);
+const auth = getAuth(fbApp);
+const db = getFirestore(fbApp);
+const flagCodes = {
+'Mexiko': 'mx', 'Sydafrika': 'za', 'Sydkorea': 'kr', 'Tjeckien': 'cz', 'Kanada': 'ca',
+'Bosnien & Herr.': 'ba', 'USA': 'us', 'Paraguay': 'py', 'Qatar': 'qa', 'Schweiz': 'ch',
+'Brasilien': 'br', 'Marocko': 'ma', 'Haiti': 'ht', 'Skottland': 'gb-sct', 'Australien': 'au',
+'Turkiet': 'tr', 'Tyskland': 'de', 'Curaçao': 'cw', 'Nederländerna': 'nl', 'Japan': 'jp',
+'Elfenbenskusten': 'ci', 'Ecuador': 'ec', 'Sverige': 'se', 'Tunisien': 'tn', 'Spanien': 'es',
+'Kap Verde': 'cv', 'Belgien': 'be', 'Egypten': 'eg', 'Saudiarabien': 'sa', 'Uruguay': 'uy',
+'Iran': 'ir', 'Nya Zeeland': 'nz', 'Frankrike': 'fr', 'Senegal': 'sn', 'Irak': 'iq',
+'Norge': 'no', 'Argentina': 'ar', 'Algeriet': 'dz', 'Österrike': 'at', 'Jordanien': 'jo',
+'Portugal': 'pt', 'DR Kongo': 'cd', 'England': 'gb-eng', 'Kroatien': 'hr', 'Ghana': 'gh',
+'Panama': 'pa', 'Uzbekistan': 'uz', 'Colombia': 'co'
+};
+const flagImg = (name) => {
+  const code = flagCodes[name];
+  if (!code) return '';
+  return `<img src="https://flagcdn.com/w40/${code}.png" width="20" height="15" alt="${name}" style="vertical-align:middle;margin-right:4px;border-radius:2px;">`;
+};
+const SCHEDULE = [
+{date:'Torsdag 11 juni', matches:[{h:'Mexiko', a:'Sydafrika', time:'21.00', tv:'TV4', city:'Mexico City', id:'m1'}]},
+{date:'Fredag 12 juni', matches:[{h:'Sydkorea', a:'Tjeckien', time:'04.00', tv:'TV4', city:'Guadalajara', id:'m2'}, {h:'Kanada', a:'Bosnien & Herr.', time:'21.00', tv:'SVT Play', city:'Toronto', id:'m3'}]},
+{date:'Lördag 13 juni', matches:[{h:'USA', a:'Paraguay', time:'03.00', tv:'TV4', city:'Los Angeles', id:'m4'}, {h:'Qatar', a:'Schweiz', time:'21.00', tv:'TV4', city:'San Francisco', id:'m5'}]},
+{date:'Söndag 14 juni', matches:[{h:'Brasilien', a:'Marocko', time:'00.00', tv:'SVT Play', city:'New Jersey', id:'m6'}, {h:'Haiti', a:'Skottland', time:'03.00', tv:'SVT Play', city:'Boston', id:'m7'}, {h:'Australien', a:'Turkiet', time:'06.00', tv:'TV4', city:'Vancouver', id:'m8'}, {h:'Tyskland', a:'Curaçao', time:'19.00', tv:'TV4', city:'Houston', id:'m9'}, {h:'Nederländerna', a:'Japan', time:'22.00', tv:'TV4', city:'Dallas', id:'m10'}]},
+{date:'Måndag 15 juni', matches:[{h:'Elfenbenskusten', a:'Ecuador', time:'01.00', tv:'TV4', city:'Philadelphia', id:'m11'}, {h:'Sverige', a:'Tunisien', time:'04.00', tv:'SVT Play', city:'Monterrey', id:'m12'}, {h:'Spanien', a:'Kap Verde', time:'18.00', tv:'SVT Play', city:'Atlanta', id:'m13'}, {h:'Belgien', a:'Egypten', time:'21.00', tv:'SVT Play', city:'Seattle', id:'m14'}]},
+{date:'Tisdag 16 juni', matches:[{h:'Saudiarabien', a:'Uruguay', time:'00.00', tv:'TV4', city:'Miami', id:'m15'}, {h:'Iran', a:'Nya Zeeland', time:'03.00', tv:'TV4', city:'Los Angeles', id:'m16'}, {h:'Frankrike', a:'Senegal', time:'21.00', tv:'SVT Play', city:'New Jersey', id:'m17'}]},
+{date:'Onsdag 17 juni', matches:[{h:'Irak', a:'Norge', time:'00.00', tv:'TV4', city:'Boston', id:'m18'}, {h:'Argentina', a:'Algeriet', time:'03.00', tv:'TV4', city:'Kansas City', id:'m19'}, {h:'Österrike', a:'Jordanien', time:'06.00', tv:'TV4', city:'San Francisco', id:'m20'}, {h:'Portugal', a:'DR Kongo', time:'19.00', tv:'TV4', city:'Houston', id:'m21'}, {h:'England', a:'Kroatien', time:'22.00', tv:'TV4', city:'Dallas', id:'m22'}]},
+{date:'Torsdag 18 juni', matches:[{h:'Ghana', a:'Panama', time:'01.00', tv:'TV4', city:'Toronto', id:'m23'}, {h:'Uzbekistan', a:'Colombia', time:'04.00', tv:'TV4', city:'Mexico City', id:'m24'}, {h:'Tjeckien', a:'Sydafrika', time:'18.00', tv:'TV4', city:'Atlanta', id:'m25'}, {h:'Schweiz', a:'Bosnien & Herr.', time:'21.00', tv:'TV4', city:'Los Angeles', id:'m26'}]},
+{date:'Fredag 19 juni', matches:[{h:'Kanada', a:'Qatar', time:'00.00', tv:'TV4', city:'Vancouver', id:'m27'}, {h:'Mexiko', a:'Sydkorea', time:'03.00', tv:'TV4', city:'Guadalajara', id:'m28'}, {h:'USA', a:'Australien', time:'21.00', tv:'SVT Play', city:'Seattle', id:'m29'}]},
+{date:'Lördag 20 juni', matches:[{h:'Skottland', a:'Marocko', time:'00.00', tv:'SVT Play', city:'Boston', id:'m30'}, {h:'Brasilien', a:'Haiti', time:'03.00', tv:'TV4', city:'Philadelphia', id:'m31'}, {h:'Turkiet', a:'Paraguay', time:'06.00', tv:'TV4', city:'San Francisco', id:'m32'}, {h:'Nederländerna', a:'Sverige', time:'19.00', tv:'TV4', city:'Houston', id:'m33'}, {h:'Tyskland', a:'Elfenbenskusten', time:'22.00', tv:'TV4', city:'Toronto', id:'m34'}]},
+{date:'Söndag 21 juni', matches:[{h:'Ecuador', a:'Curaçao', time:'02.00', tv: 'TV4', city:'Kansas City', id:'m35'}, {h:'Tunisien', a:'Japan', time:'06.00', tv:'SVT Play', city:'Monterrey', id:'m36'}, {h:'Spanien', a:'Saudiarabien', time:'18.00', tv:'TV4', city:'Atlanta', id:'m37'}, {h:'Belgien', a:'Iran', time:'21.00', tv:'TV4', city:'Los Angeles', id:'m38'}]},
+{date:'Måndag 22 juni', matches:[{h:'Uruguay', a:'Kap Verde', time:'00.00', tv:'TV4', city:'Miami', id:'m39'}, {h:'Nya Zeeland', a:'Egypten', time:'03.00', tv:'TV4', city:'Vancouver', id:'m40'}, {h:'Argentina', a:'Österrike', time:'19.00', tv:'SVT Play', city:'Dallas', id:'m41'}, {h:'Frankrike', a:'Irak', time:'23.00', tv:'SVT Play', city:'Philadelphia', id:'m42'}]},
+{date:'Tisdag 23 juni', matches:[{h:'Norge', a:'Senegal', time:'02.00', tv:'SVT Play', city:'New Jersey', id:'m43'}, {h:'Jordanien', a:'Algeriet', time:'05.00', tv:'TV4', city:'San Francisco', id:'m44'}, {h:'Portugal', a:'Uzbekistan', time:'19.00', tv:'SVT Play', city:'Houston', id:'m45'}, {h:'England', a:'Ghana', time:'22.00', tv:'SVT Play', city:'Boston', id:'m46'}]},
+{date:'Onsdag 24 juni', matches:[{h:'Panama', a:'Kroatien', time:'01.00', tv:'TV4', city:'Toronto', id:'m47'}, {h:'Colombia', a:'DR Kongo', time:'04.00', tv:'TV4', city:'Guadalajara', id:'m48'}, {h:'Schweiz', a:'Kanada', time:'21.00', tv:'TV4', city:'Vancouver', id:'m49'}, {h:'Bosnien & Herr.', a:'Qatar', time:'21.00', tv:'TV4', city:'Seattle', id:'m50'}]},
+{date:'Torsdag 25 juni', matches:[{h:'Marocko', a:'Haiti', time:'00.00', tv:'TV4', city:'Atlanta', id:'m51'}, {h:'Skottland', a:'Brasilien', time:'00.00', tv:'TV4', city:'Miami', id:'m52'}, {h:'Sydafrika', a:'Sydkorea', time:'03.00', tv:'SVT Play', city:'Monterrey', id:'m53'}, {h:'Tjeckien', a:'Mexiko', time:'03.00', tv:'SVT Play', city:'Mexico City', id:'m54'}, {h:'Curaçao', a:'Elfenbenskusten', time:'22.00', tv:'SVT Play', city:'Philadelphia', id:'m55'}, {h:'Ecuador', a:'Tyskland', time:'22.00', tv:'SVT Play', city:'New Jersey', id:'m56'}]},
+{date:'Fredag 26 juni', matches:[{h:'Tunisien', a:'Nederländerna', time:'01.00', tv:'SVT Play', city:'Kansas City', id:'m57'}, {h:'Japan', a:'Sverige', time:'01.00', tv:'SVT Play', city:'Dallas', id:'m58'}, {h:'Turkiet', a:'USA', time:'04.00', tv:'TV4', city:'Los Angeles', id:'m59'}, {h:'Paraguay', a:'Australien', time:'04.00', tv:'TV4', city:'San Francisco', id:'m60'}, {h:'Norge', a:'Frankrike', time:'21.00', tv:'TV4', city:'Boston', id:'m61'}, {h:'Senegal', a:'Irak', time:'21.00', tv:'TV4', city:'Toronto', id:'m62'}]},
+{date:'Lördag 27 juni', matches:[{h:'Kap Verde', a:'Saudiarabien', time:'02.00', tv: 'TV4', city:'Houston', id:'m63'}, {h:'Uruguay', a:'Spanien', time:'02.00', tv:'TV4', city:'Guadalajara', id:'m64'}, {h:'Nya Zeeland', a:'Belgien', time:'05.00', tv:'TV4', city:'Vancouver', id:'m65'}, {h:'Egypten', a:'Iran', time:'05.00', tv:'TV4', city:'Seattle', id:'m66'}, {h:'Panama', a:'England', time:'23.00', tv:'SVT Play', city:'New Jersey', id:'m67'}, {h:'Kroatien', a:'Ghana', time:'23.00', tv:'SVT Play', city:'Philadelphia', id:'m68'}]},
+{date:'Söndag 28 juni', matches:[{h:'DR Kongo', a:'Uzbekistan', time:'01.30', tv:'TV4', city:'Atlanta', id:'m69'}, {h:'Colombia', a:'Portugal', time:'01.30', tv:'TV4', city:'Miami', id:'m70'}, {h:'Algeriet', a:'Österrike', time:'04.00', tv:'TV4', city:'Kansas City', id:'m71'}, {h:'Jordanien', a:'Argentina', time:'04.00', tv:'TV4', city:'Dallas', id:'m72'}]}
+];
+const SCHEDULE_R16 = [
+{date:'Söndag 28 juni', matches:[{h:'2A', a:'2B', time:'21.00', tv:'TV4', city:'Los Angeles', id:'r16_1'}]},
+{date:'Måndag 29 juni', matches:[{h:'1C', a:'2F', time:'19.00', tv:'TV4', city:'Boston', id:'r16_2'}, {h:'1E', a:'3A/B/C/D/F', time:'22.30', tv:'SVT', city:'Atlanta', id:'r16_3'}]},
+{date:'Tisdag 30 juni', matches:[{h:'1F', a:'2C', time:'03.00', tv:'SVT', city:'Dallas', id:'r16_4'}, {h:'2E', a:'2I', time:'19.00', tv:'TV4', city:'Miami', id:'r16_5'}, {h:'1I', a:'3C/D/F/G/H', time:'23.00', tv:'TV4', city:'Houston', id:'r16_6'}]},
+{date:'Onsdag 1 juli', matches:[{h:'1A', a:'3C/E/F/H/I', time:'03.00', tv:'TV4', city:'Mexico City', id:'r16_7'}, {h:'1L', a:'3E/H/I/J/K', time:'18.00', tv:'SVT', city:'Toronto', id:'r16_8'}, {h:'1G', a:'3A/E/H/I/J', time:'22.00', tv:'TV4', city:'San Francisco', id:'r16_9'}]},
+{date:'Torsdag 2 juli', matches:[{h:'1D', a:'3B/E/F/I/J', time:'02.00', tv:'TV4', city:'Seattle', id:'r16_10'}, {h:'1H', a:'2J', time:'21.00', tv:'SVT', city:'New Jersey', id:'r16_11'}]},
+{date:'Fredag 3 juli', matches:[{h:'2K', a:'2L', time:'01.00', tv:'TV4', city:'Kansas City', id:'r16_12'}, {h:'1B', a:'3E/F/G/I/J', time:'05.00', tv:'TV4', city:'Vancouver', id:'r16_13'}, {h:'2D', a:'2G', time:'20.00', tv:'TV4', city:'Philadelphia', id:'r16_14'}]},
+{date:'Lördag 4 juli', matches:[{h:'1J', a:'2H', time:'00.00', tv:'SVT', city:'Monterrey', id:'r16_15'}, {h:'1K', a:'3D/E/I/J/L', time:'03.30', tv:'SVT', city:'Guadalajara', id:'r16_16'}]}
+];
+const SCHEDULE_QF = [
+{date:'Lördag 4 juli', matches:[
+{h:'W73', a:'W75', time:'19.00', tv:'TV4', city:'Philadelphia', id:'qf_1'},
+{h:'W74', a:'W77', time:'23.00', tv:'SVT', city:'Houston', id:'qf_2'}
+]},
+{date:'Söndag 5 juli', matches:[
+{h:'W76', a:'W78', time:'22.00', tv:'TV4', city:'East Rutherford', id:'qf_3'}
+]},
+{date:'Måndag 6 juli', matches:[
+{h:'W79', a:'W80', time:'02.00', tv:'SVT', city:'Mexico City', id:'qf_4'},
+{h:'W83', a:'W84', time:'21.00', tv:'TV4', city:'Arlington', id:'qf_5'}
+]},
+{date:'Tisdag 7 juli', matches:[
+{h:'W81', a:'W82', time:'02.00', tv:'TV4', city:'Seattle', id:'qf_6'},
+{h:'W86', a:'W88', time:'18.00', tv:'TV4', city:'Atlanta', id:'qf_7'},
+{h:'W85', a:'W87', time:'22.00', tv:'SVT', city:'Vancouver', id:'qf_8'}
+]}
+];
+const SCHEDULE_QF2 = [
+{date:'Torsdag 9 juli', matches:[
+{h:'W89', a:'W90', time:'22.00', tv:'TV4', city:'Foxborough', id:'qf2_1'}
+]},
+{date:'Fredag 10 juli', matches:[
+{h:'W93', a:'W94', time:'21.00', tv:'SVT', city:'Inglewood', id:'qf2_2'}
+]},
+{date:'Lördag 11 juli', matches:[
+{h:'W91', a:'W92', time:'23.00', tv:'TV4', city:'Miami Gardens', id:'qf2_3'}
+]},
+{date:'Söndag 12 juli', matches:[
+{h:'W95', a:'W96', time:'03.00', tv:'SVT', city:'Kansas City', id:'qf2_4'}
+]}
+];
+const SCHEDULE_SEMI = [
+{date:'Tisdag 14 juli', matches:[
+{h:'W97', a:'W98', time:'21.00', tv:'SVT', city:'Arlington', id:'semi_1'}
+]},
+{date:'Onsdag 15 juli', matches:[
+{h:'W99', a:'W100', time:'21.00', tv:'TV4', city:'Atlanta', id:'semi_2'}
+]}
+];
+const SCHEDULE_BRONZE = [
+{date:'Lördag 18 juli', matches:[
+{h:'L101', a:'L102', time:'23.00', tv:'SVT', city:'Miami Gardens', id:'bronze_1'}
+]}
+];
+const SCHEDULE_FINAL = [
+{date:'Söndag 19 juli', matches:[
+{h:'W101', a:'W102', time:'21.00', tv:'TV4', city:'East Rutherford', id:'final_1'}
+]}
+];
+let predictions = {};
+let groupTableData = {};
+let gruppTabellListener = null;
+let topplistaListener = null;
+groupTableData = {
+A: [{lag:'Mexiko',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Sydkorea',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Sydafrika',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Tjeckien',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0}],
+B: [{lag:'Kanada',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Qatar',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Schweiz',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Bosnien & Herr.',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0}],
+C: [{lag:'Brasilien',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Marocko',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Haiti',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Skottland',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0}],
+D: [{lag:'USA',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Paraguay',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Australien',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Turkiet',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0}],
+E: [{lag:'Tyskland',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Curaçao',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Elfenbenskusten',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Ecuador',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0}],
+F: [{lag:'Nederländerna',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Japan',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Tunisien',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Sverige',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0}],
+G: [{lag:'Belgien',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Iran',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Nya Zeeland',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Egypten',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0}],
+H: [{lag:'Spanien',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Saudiarabien',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Uruguay',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Kap Verde',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0}],
+I: [{lag:'Frankrike',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Senegal',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Norge',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Irak',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0}],
+J: [{lag:'Argentina',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Algeriet',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Österrike',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Jordanien',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0}],
+K: [{lag:'Portugal',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Uzbekistan',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Colombia',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'DR Kongo',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0}],
+L: [{lag:'England',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Ghana',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Kroatien',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0},{lag:'Panama',s:0,v:0,o:0,f:0,gm:0,im:0,ms:0,p:0}],
+};
+const GROUP_MATCHES = {
+A: ['m1','m2','m25','m28','m53','m54'],
+B: ['m3','m5','m26','m27','m49','m50'],
+C: ['m6','m7','m30','m31','m51','m52'],
+D: ['m4','m8','m29','m32','m59','m60'],
+E: ['m9','m11','m34','m35','m55','m56'],
+F: ['m10','m12','m33','m36','m57','m58'],
+G: ['m14','m16','m38','m40','m65','m66'],
+H: ['m13','m15','m37','m39','m63','m64'],
+I: ['m17','m18','m42','m43','m61','m62'],
+J: ['m19','m20','m41','m44','m71','m72'],
+K: ['m21','m24','m45','m48','m69','m70'],
+L: ['m22','m23','m46','m47','m67','m68']
+};
+function isAdmin() {
+  return auth.currentUser?.uid === 'sQH9PnqxO3aVsArNKVs7BJiCwwH3';
+}
+let currentAuthMode = 'login';
+let currentUserProfile = null;
+// --- AUTO-SPARA (debounced) ---
+let autoSaveTimer = null;
+function autoSave() {
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(async () => {
+    if (!auth.currentUser) return;
+    const deadline = new Date('2026-06-11T21:00:00+02:00');
+    if (new Date() > deadline) return;
+    try {
+      await setDoc(doc(db, 'tips', auth.currentUser.uid), {
+        predictions,
+        bonus: window.bonusData || {},
+        username: currentUserProfile?.username || auth.currentUser.email,
+        firstName: currentUserProfile?.firstName || '',
+        lastName: currentUserProfile?.lastName || ''
+      }, { merge: true });
+    } catch(e) {
+      console.error('autoSave:', e);
+    }
+  }, 800); // väntar 800ms efter senaste knapptryckning
+}
+window.updateSlutspelTeam = (id, side, val) => {
+  if (!auth.currentUser) {
+    showToast("Du måste logga in för att tippa!", true);
+    openModal('authModal');
+    return;
+  }
+  if (!predictions[id]) predictions[id] = {};
+  predictions[id][side] = val;
+  autoSave();
+};
+function renderGroups() {
+const container = document.getElementById('schedule-grid');
+if(!container) return;
+const deadline = new Date('2026-06-11T21:00:00');
+const isLocked = new Date() > deadline;
+container.innerHTML = SCHEDULE.map(day => `
+<div class="date-divider">${day.date}</div>
+${day.matches.map(m => {
+const valH = predictions[m.id]?.h || '';
+const valA = predictions[m.id]?.a || '';
+return `
+<div class="match-card">
+<div class="match-row">
+<div class="match-info">
+<div class="match-teams">
+${flagImg(m.h)} ${m.h} – ${flagImg(m.a)} ${m.a}
+</div>
+<div class="match-meta">
+<span class="meta-item">   🕒    ${m.time}</span>
+<span class="meta-item">   📺    ${m.tv}</span>
+<span class="meta-item"><span style="color:#ff4d4d">   📍   </span> ${m.city}</span>
+</div>
+</div>
+<div class="score-inputs">
+<input type="number" value="${valH}" ${isLocked ? 'disabled' : ''} onchange="updatePred('${m.id}','h',this.value)">
+<span>-</span>
+<input type="number" value="${valA}" ${isLocked ? 'disabled' : ''} onchange="updatePred('${m.id}','a',this.value)">
+</div>
+</div>
+</div>`;
+}).join('')}
+`).join('');
+}
+function renderGenericSlutspel(scheduleData, containerId) {
+const container = document.getElementById(containerId);
+if (!container) return;
+const deadline = new Date('2026-06-11T21:00:00');
+const isLocked = new Date() > deadline;
+container.innerHTML = scheduleData.map(day => `
+<div class="date-divider">${day.date}</div>
+${day.matches.map(m => {
+const valH = predictions[m.id]?.h || '';
+const valA = predictions[m.id]?.a || '';
+const teamH = predictions[m.id]?.teamH || '';
+const teamA = predictions[m.id]?.teamA || '';
+return `
+<div class="match-card">
+<div class="match-row">
+<div class="match-info" style="display: flex; flex-direction: column; gap: 8px; flex: 1;">
+<div style="display: flex; align-items: center; gap: 8px;">
+<span style="font-size: 16px;">    🏳️    </span>
+<input type="text" value="${teamH}" placeholder="${m.h}" ${isLocked ? 'disabled' : ''} onchange="updateSlutspelTeam('${m.id}', 'teamH', this.value)" style="background: transparent; border: none; border-bottom: 1px dashed rgba(89,213,255,0.4); color: #fff; font-family: 'Barlow'; font-size: 14px; padding: 2px 4px; width: 150px;">
+</div>
+<div style="display: flex; align-items: center; gap: 8px;">
+<span style="font-size: 16px;">    🏳️    </span>
+<input type="text" value="${teamA}" placeholder="${m.a}" ${isLocked ? 'disabled' : ''} onchange="updateSlutspelTeam('${m.id}', 'teamA', this.value)" style="background: transparent; border: none; border-bottom: 1px dashed rgba(89,213,255,0.4); color: #fff; font-family: 'Barlow'; font-size: 14px; padding: 2px 4px; width: 150px;">
+</div>
+<div class="match-meta">
+<span class="meta-item">   🕒    ${m.time}</span>
+<span class="meta-item">   📺    ${m.tv}</span>
+<span class="meta-item"><span style="color:#ff4d4d">   📍   </span> ${m.city || 'TBD'}</span>
+</div>
+</div>
+<div class="score-inputs">
+<input type="number" value="${valH}" ${isLocked ? 'disabled' : ''} onchange="updatePred('${m.id}','h',this.value)">
+<span>-</span>
+<input type="number" value="${valA}" ${isLocked ? 'disabled' : ''} onchange="updatePred('${m.id}','a',this.value)">
+</div>
+</div>
+</div>`;
+}).join('')}
+`).join('');
+}
+window.updatePred = async (id, side, val) => {
+if (!auth.currentUser) {
+showToast("Du måste logga in för att tippa!", true);
+openModal('authModal');
+return;
+}
+if(!predictions[id]) {
+predictions[id] = {h:'', a:''};
+}
+predictions[id][side] = val;
+updateStats();
+// Lägg till dessa rader precis EFTER updateStats()-anropet, INNAN if (isAdmin()) {
+if (!isAdmin()) {
+  autoSave();
+}
+// ADMIN = spara som facit
+if (isAdmin()) {
+try {
+const facitRef = doc(db, 'facit', 'resultat');
+const facitSnap = await getDoc(facitRef);
+const facitData =
+facitSnap.exists()
+? facitSnap.data()
+: {};
+if (!facitData[id]) {
+facitData[id] = {h:null, a:null};
+}
+facitData[id][side] =
+val === ''
+? null
+: Number(val);
+await setDoc(facitRef, facitData);
+} catch(e) {
+console.error(e);
+showToast(
+"Kunde inte spara facit",
+true
+);
+}
+}
+};
+window.switchAuthTab = (mode) => {
+currentAuthMode = mode;
+const loginTab = document.getElementById('tab-login');
+const registerTab = document.getElementById('tab-register');
+const registerFields = document.getElementById('auth-register-fields');
+const submitBtn = document.getElementById('authSubmitBtn');
+if (mode === 'register') {
+loginTab.classList.remove('active');
+registerTab.classList.add('active');
+registerFields.style.display = 'block';
+submitBtn.textContent = 'Skapa konto';
+} else {
+registerTab.classList.remove('active');
+loginTab.classList.add('active');
+registerFields.style.display = 'none';
+submitBtn.textContent = 'Logga in';
+}
+};
+function getFriendlyErrorMessage(error) {
+const code = error.code;
+switch(code) {
+case 'auth/weak-password': return 'Lösenordet är för svagt. Det måste vara minst 6 tecken långt.';
+case 'auth/wrong-password': return 'Felaktigt lösenord. Försök igen.';
+case 'auth/invalid-email': return 'Ogiltigt användarnamn.';
+case 'auth/email-already-in-use':  return 'Användarnamnet är redan taget.';
+case 'auth/user-not-found': return 'Användarnamnet finns inte.';
+case 'auth/network-request-failed': return 'Kunde inte ansluta till servern. Kontrollera din anslutning eller adblocker.';
+default: return 'Ett fel uppstod: ' + error.message;
+}
+}
+window.submitAuth = async () => {
+const loginUsername =
+document.getElementById('authUsername').value.trim();
+const safeLoginUsername = loginUsername
+.toLowerCase()
+.replaceAll('å', 'a')
+.replaceAll('ä', 'a')
+.replaceAll('ö', 'o')
+.replace(/\s+/g, '')
+.replace(/[^a-z0-9_-]/g, '');
+const email = `${safeLoginUsername}@vmtips.com`;
+const password = document.getElementById('authPassword').value;
+if (!loginUsername || !password) {
+return alert("Fyll i användarnamn och lösenord.");
+}
+if (currentAuthMode === 'login') {
+try {
+await signInWithEmailAndPassword(auth, email, password);
+closeModal('authModal');
+} catch(e) {
+alert(getFriendlyErrorMessage(e));
+}
+} else {
+const firstName = document.getElementById('regFirstName').value.trim();
+const lastName = document.getElementById('regLastName').value.trim();
+const displayUsername = document.getElementById('regUsername').value.trim(); const username = displayUsername.toLowerCase();
+const password = document.getElementById('authPassword').value;
+if (!firstName || !lastName || !username) {
+return alert("Fyll i alla profiluppgifter.");
+}
+const safeUsername = username
+.toLowerCase()
+.replaceAll('å', 'a')
+.replaceAll('ä', 'a')
+.replaceAll('ö', 'o')
+.replace(/\s+/g, '')
+.replace(/[^a-z0-9_-]/g, '');
+try {
+const email = `${safeUsername}@vmtips.com`;
+const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+await setDoc(doc(db, "users", userCredential.user.uid), {
+firstName,
+lastName,
+username,
+displayUsername
+});
+closeModal('authModal');
+showToast("Konto skapat!");
+} catch(e) {
+alert(getFriendlyErrorMessage(e));
+}
+}
+};
+window.doLogout = async () => { await signOut(auth); location.reload(); };
+window.updateAllScores = async () => {
+  try {
+    await beräknaOchSparaPoäng();
+  } catch (e) {
+    console.error(e);
+    showToast(e.message || "Kunde inte uppdatera poäng", true);
+  }
+};
+// Klistra in här ↓↓↓
+window.saveTips = async () => {
+  if (!auth.currentUser) {
+    showToast("Du måste logga in för att spara!", true);
+    return openModal('authModal');
+  }
+  const deadline = new Date('2026-06-11T21:00:00+02:00');
+  if (new Date() > deadline) return showToast("Tipsen är låsta!", true);
+  try {
+    await setDoc(doc(db, 'tips', auth.currentUser.uid), {
+      predictions,
+      bonus: window.bonusData || {},
+      username: currentUserProfile?.username || auth.currentUser.email,
+      firstName: currentUserProfile?.firstName || '',
+      lastName: currentUserProfile?.lastName || ''
+    }, { merge: true });
+    showToast("Dina tips är sparade!");
+  } catch(e) {
+    console.error(e);
+    showToast("Kunde inte spara tips", true);
+  }
+};
+onAuthStateChanged(auth, async (user) => {
+if(user) {
+const userDoc = await getDoc(doc(db, "users", user.uid));
+if (userDoc.exists()) {
+currentUserProfile = userDoc.data();
+document.getElementById('userBadge').textContent = currentUserProfile.displayUsername || currentUserProfile.username;
+} else {
+document.getElementById('userBadge').textContent = user.email;
+}
+document.getElementById('userBadge').style.display = 'block';
+document.getElementById('loginBtn').style.display = 'none';
+document.getElementById('logoutBtn').style.display = 'block';
+if (isAdmin()) {
+const adminBtn = document.createElement('button');
+adminBtn.textContent = '   🔧    Uppdatera poäng';
+adminBtn.className = 'btn';
+adminBtn.style.marginLeft = '10px';
+adminBtn.onclick = updateAllScores;
+document.querySelector('.footer').appendChild(adminBtn);
+const pdfBtn = document.createElement('button');
+pdfBtn.textContent = ' 📄 Exportera PDF';
+pdfBtn.className = 'btn';
+pdfBtn.style.marginLeft = '10px';
+pdfBtn.onclick = exportTipsPDF;
+document.querySelector('.footer').appendChild(pdfBtn);
+}
+const brytpunkt = new Date('2026-06-12T01:00:00+02:00');
+const nu = new Date();
+if (nu < brytpunkt) {
+showPage('groups');
+} else {
+showPage('topplista');
+}
+await loadUserTips(user);
+} else {
+renderTabContent(localStorage.getItem('activeTab') || 'groups');
+}
+applySavedTab();
+document.getElementById('loading').classList.add('hidden');
+});
+function loadUserTips(user) {
+onSnapshot(doc(db, "tips", user.uid), (d) => {
+if(d.exists()) {
+predictions = d.data().predictions || {};
+loadBonus(d.data());
+}
+const activeTab = localStorage.getItem('activeTab') || 'groups';
+renderTabContent(activeTab);
+updateStats();
+}, (e) => {
+console.error('loadUserTips:', e);
+});
+}
+function updateStats() {
+const count = Object.values(predictions).filter(p => p.h !== '' && p.a !== '').length;
+document.getElementById('footer-stats').textContent = `Tippat: ${count} / 104 matcher`;
+}
+function showToast(msg, isError = false) {
+const t = document.getElementById('toast');
+t.textContent = msg;
+t.classList.remove('success', 'error');
+if (isError) t.classList.add('error'); else t.classList.add('success');
+t.classList.add('show');
+setTimeout(() => { t.classList.remove('show', 'success', 'error'); }, 7000);
+}
+function renderTabContent(tabId) {
+if (tabId === 'groups') renderGroups();
+else if (tabId === 'r16') renderGenericSlutspel(SCHEDULE_R16, 'schedule-r16-grid');
+else if (tabId === 'qf') renderGenericSlutspel(SCHEDULE_QF, 'schedule-qf-grid');
+else if (tabId === 'qf2') renderGenericSlutspel(SCHEDULE_QF2, 'schedule-qf2-grid');
+else if (tabId === 'semi') renderGenericSlutspel(SCHEDULE_SEMI, 'schedule-semi-grid');
+else if (tabId === 'bronze') renderGenericSlutspel(SCHEDULE_BRONZE, 'schedule-bronze-grid');
+else if (tabId === 'final') renderGenericSlutspel(SCHEDULE_FINAL, 'schedule-final-grid');
+}
+window.showPage = (id, btn) => {
+document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+const targetPage = document.getElementById('page-' + id);
+if (targetPage) targetPage.classList.add('active');
+document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+if (btn) {
+btn.classList.add('active');
+} else {
+const fallbackBtn = document.getElementById('nav-' + id);
+if (fallbackBtn) fallbackBtn.classList.add('active');
+}
+localStorage.setItem('activeTab', id);
+renderTabContent(id);
+if (id === 'topplista') renderTopplista();
+if (id === 'grupptabell') window.renderGrupptabell();
+};
+window.openModal = (id) => document.getElementById(id).classList.add('open');
+window.closeModal = (id) => document.getElementById(id).classList.remove('open');
+window.applySavedTab = function() {
+const savedTab = localStorage.getItem('activeTab');
+const validTabs = ['groups', 'r16', 'qf', 'qf2', 'semi', 'bronze', 'final', 'topplista', 'grupptabell', 'bonus'];
+if (savedTab && validTabs.includes(savedTab)) {
+window.showPage(savedTab, null);
+} else {
+window.showPage('groups', null);
+}
+}
+setTimeout(() => {
+const loadingScreen = document.getElementById('loading');
+if (loadingScreen && !loadingScreen.classList.contains('hidden')) {
+loadingScreen.classList.add('hidden');
+showToast("Kunde inte ansluta till Firebase. Inaktivera eventuell AdBlocker.", true);
+}
+}, 7000);
+window.renderGrupptabell = function() {
+const grid = document.getElementById('grupptabell-grid');
+if (!grid) return;
+// stäng gammal listener
+if (gruppTabellListener) {
+  gruppTabellListener();
+}
+gruppTabellListener = onSnapshot(
+  doc(db, 'facit', 'grupper'),
+  (snap) => {
+  grid.innerHTML = '';  
+if (!snap.exists()) {
+  grid.innerHTML = '<p style="color:var(--text2);">Ingen data ännu – turneringen har inte börjat.</p>';
+  return;
+}
+const data = snap.data();
+groupTableData = {}; for (const _g in data) {   const _raw = data[_g];   groupTableData[_g] = Array.isArray(_raw)     ? _raw.map(x => Object.assign({}, x))     : Object.keys(_raw).sort((a,b) => Number(a)-Number(b)).map(k => Object.assign({}, _raw[k])); }
+for (const g in groupTableData) {
+groupTableData[g].sort((a, b) => {
+const pA = Number(a.p) || 0; const pB = Number(b.p) || 0;
+if (pB !== pA) return pB - pA;
+const msA = Number(a.ms) || 0; const msB = Number(b.ms) || 0;
+if (msB !== msA) return msB - msA;
+const gmA = Number(a.gm) || 0; const gmB = Number(b.gm) || 0;
+return gmB - gmA;
+});
+}
+const grupperHTML = Object.entries(GROUP_MATCHES)
+.sort(([a], [b]) => a.localeCompare(b))
+.map(([grupp]) => {
+const lag = groupTableData[grupp] || [];
+return `
+<div class="group-section">
+<div class="group-label">Grupp ${grupp}</div>
+<table class="group-table">
+<thead>
+<tr>
+<th>#</th>
+<th>Lag</th>
+<th>S</th><th>V</th><th>O</th><th>F</th>
+<th>GM</th><th>IM</th><th>MS</th>
+<th class="pts">P</th>
+</tr>
+</thead>
+<tbody>
+${lag.map((l, i) => {
+const vS = l.s !== undefined && l.s !== '' ? Number(l.s) : 0;
+const vV = l.v !== undefined && l.v !== '' ? Number(l.v) : 0;
+const vO = l.o !== undefined && l.o !== '' ? Number(l.o) : 0;
+const vF = l.f !== undefined && l.f !== '' ? Number(l.f) : 0;
+const vGM = l.gm !== undefined && l.gm !== '' ? Number(l.gm) : 0;
+const vIM = l.im !== undefined && l.im !== '' ? Number(l.im) : 0;
+const vMS = l.ms !== undefined && l.ms !== '' ? Number(l.ms) : 0;
+const vP = l.p !== undefined && l.p !== '' ? Number(l.p) : 0;
+return `
+<tr>
+<td style="color:var(--text2)">${i + 1}</td>
+<td>${l.lag}</td>
+<td>${vS}</td>
+<td>${vV}</td>
+<td>${vO}</td>
+<td>${vF}</td>
+<td>${vGM}</td>
+<td>${vIM}</td>
+<td>${vMS}</td>
+<td class="pts">${vP}</td>
+</tr>`
+}).join('')}
+</tbody>
+</table>
+</div>`;
+}).join('');
+grid.innerHTML = grupperHTML;
+}, (e) => {
+console.error('renderGrupptabell:', e);
+grid.innerHTML =
+'<p style="color:var(--text2);">Fel: ' +
+(e.message || e.code || 'okänt') +
+'</p>';
+});
+}  
+function calculateGroupTables(facitResultat) {
+const tables = {};
+for (const grupp in GROUP_MATCHES) {
+    const matcher = GROUP_MATCHES[grupp];
+    const lagTabell = {};
+    // Skapa alla lag först
+    matcher.forEach(matchId => {
+        const matchData = SCHEDULE
+            .flatMap(day => day.matches)
+            .find(m => m.id === matchId);
+        if (!matchData) return;
+        const home = matchData.h;
+        const away = matchData.a;
+        if (!lagTabell[home]) {
+            lagTabell[home] = {
+                lag: home,
+                s: 0,
+                v: 0,
+                o: 0,
+                f: 0,
+                gm: 0,
+                im: 0,
+                ms: 0,
+                p: 0
+            };
+        }
+        if (!lagTabell[away]) {
+            lagTabell[away] = {
+                lag: away,
+                s: 0,
+                v: 0,
+                o: 0,
+                f: 0,
+                gm: 0,
+                im: 0,
+                ms: 0,
+                p: 0
+            };
+        }
+    });
+    // Räkna resultat
+    matcher.forEach(matchId => {
+        const result = facitResultat[matchId];
+        if (!result) return;
+        const matchData = SCHEDULE
+            .flatMap(day => day.matches)
+            .find(m => m.id === matchId);
+        if (!matchData) return;
+        const home = matchData.h;
+        const away = matchData.a;
+        if (result.h === null || result.a === null) return;
+        const h = Number(result.h);
+        const a = Number(result.a);
+        if (isNaN(h) || isNaN(a)) return;
+        const homeTeam = lagTabell[home];
+        const awayTeam = lagTabell[away];
+        homeTeam.s++;
+        awayTeam.s++;
+        homeTeam.gm += h;
+        homeTeam.im += a;
+        awayTeam.gm += a;
+        awayTeam.im += h;
+        homeTeam.ms = homeTeam.gm - homeTeam.im;
+        awayTeam.ms = awayTeam.gm - awayTeam.im;
+        if (h > a) {
+            homeTeam.v++;
+            awayTeam.f++;
+            homeTeam.p += 3;
+        } else if (a > h) {
+            awayTeam.v++;
+            homeTeam.f++;
+            awayTeam.p += 3;
+        } else {
+            homeTeam.o++;
+            awayTeam.o++;
+            homeTeam.p += 1;
+            awayTeam.p += 1;
+        }
+    });
+    tables[grupp] = Object.values(lagTabell).sort((a, b) => {
+        if (b.p !== a.p) return b.p - a.p;
+        if (b.ms !== a.ms) return b.ms - a.ms;
+        return b.gm - a.gm;
+    });
+}
+return tables;
+}
+function räknaMatchPoäng(tippH, tippA, facitH, facitA) {
+  if (tippH === '' || tippA === '' || tippH === null || tippA === null) return 0;
+  if (facitH === null || facitA === null) return 0;
+  const th = parseInt(tippH), ta = parseInt(tippA);
+  const fh = parseInt(facitH), fa = parseInt(facitA);
+  if (isNaN(th) || isNaN(ta) || isNaN(fh) || isNaN(fa)) return 0;
+  // Klassisk 1-2-4: Helt rätt resultat ger alltid 4 poäng, oavsett om det är kryss eller inte
+  if (th === fh && ta === fa) return 4;
+  const tippUtfall = th > ta ? 1 : th < ta ? -1 : 0;
+  const facitUtfall = fh > fa ? 1 : fh < fa ? -1 : 0;
+  if (tippUtfall !== facitUtfall) return 0;
+  const tippMS = th - ta;
+  const facitMS = fh - fa;
+  if (tippMS === facitMS && facitUtfall !== 0) return 2;
+  return 1;
+}
+function räknaSlutspelslagPoäng(predictions, facitResultat) {
+let poäng = 0;
+const rundaPoäng = {
+r16:    2,
+qf:     3,
+qf2:    4,
+semi:   6,
+final:  8,
+};
+const slutspelsMatcher = [
+...Array.from({length:16}, (_,i) => ({id:`r16_${i+1}`, runda:'r16'})),
+...Array.from({length:8},  (_,i) => ({id:`qf_${i+1}`,  runda:'qf'})),
+...Array.from({length:4},  (_,i) => ({id:`qf2_${i+1}`, runda:'qf2'})),
+{id:'semi_1', runda:'semi'}, {id:'semi_2', runda:'semi'},
+{id:'final_1', runda:'final'},
+];
+for (const match of slutspelsMatcher) {
+const facit = facitResultat[match.id];
+const tipp  = predictions[match.id];
+if (!facit || !tipp) continue;
+const p = rundaPoäng[match.runda];
+if (tipp.teamH && facit.winnerH &&
+tipp.teamH.trim().toLowerCase() === facit.winnerH.trim().toLowerCase()) {
+poäng += p;
+}
+if (tipp.teamA && facit.winnerA &&
+tipp.teamA.trim().toLowerCase() === facit.winnerA.trim().toLowerCase()) {
+poäng += p;
+}
+}
+const finalFacit  = facitResultat['final_1'];
+const bronzeFacit = facitResultat['bronze_1'];
+const winnerTipp  = predictions['winner']?.teamH?.trim().toLowerCase();
+if (finalFacit?.vmVinnare && winnerTipp === finalFacit.vmVinnare.trim().toLowerCase())  poäng += 10;
+if (finalFacit?.silver    && winnerTipp === finalFacit.silver.trim().toLowerCase())     poäng += 7;
+if (bronzeFacit?.brons    && winnerTipp === bronzeFacit.brons.trim().toLowerCase())     poäng += 4;
+return poäng;
+}
+function räknaBonusPoäng(bonus, bonusFacit) {
+if (!bonus || !bonusFacit) return 0;
+let poäng = 0;
+const jämför = (a, b) => a && b && a.trim().toLowerCase() === b.trim().toLowerCase();
+if (jämför(bonus.skyttekung,    bonusFacit.skyttekung))   poäng += 5;
+if (jämför(bonus.flest_mal,     bonusFacit.flest_mal))    poäng += 3;
+if (jämför(bonus.gula_kort,     bonusFacit.gula_kort))    poäng += 3;
+if (jämför(bonus.roda_kort,     bonusFacit.roda_kort))    poäng += 4;
+if (jämför(bonus.flest_inslapp, bonusFacit.flest_inslapp)) poäng += 3;
+return poäng;
+}
+async function beräknaOchSparaPoäng() {
+// getDocs, collection, getDoc importeras statiskt ovan
+const [facitSnap, bonusFacitSnap] = await Promise.all([
+getDoc(doc(db, 'facit', 'resultat')),
+getDoc(doc(db, 'facit', 'bonus'))
+]);
+if (!facitSnap.exists()) {
+throw new Error("Facit saknas i databasen.");
+}
+const facitResultat = facitSnap.data();
+const bonusFacit    = bonusFacitSnap.exists() ? bonusFacitSnap.data() : {};
+// Ladda adminens inmatade lagnamn för slutspelsmatcher
+const ADMIN_UID = 'sQH9PnqxO3aVsArNKVs7BJiCwwH3';
+const adminSnap = await getDoc(doc(db, 'tips', ADMIN_UID));
+const adminPred = adminSnap.exists() ? (adminSnap.data().predictions || {}) : {};
+// Sätt winnerH/winnerA på varje slutspelsmatch baserat på adminens lagnamn
+const slutspelIds = [
+  ...Array.from({length:16}, (_,i) => `r16_${i+1}`),
+  ...Array.from({length:8},  (_,i) => `qf_${i+1}`),
+  ...Array.from({length:4},  (_,i) => `qf2_${i+1}`),
+  'semi_1', 'semi_2', 'bronze_1', 'final_1'
+];
+for (const id of slutspelIds) {
+  const a = adminPred[id];
+  if (!a) continue;
+  if (!facitResultat[id]) facitResultat[id] = {};
+  facitResultat[id].winnerH = a.teamH?.trim() || '';
+  facitResultat[id].winnerA = a.teamA?.trim() || '';
+}
+// VM-vinnare och silver: beräknas från finalens resultat + lagnamn
+const ff = facitResultat['final_1'];
+if (ff && ff.h !== null && ff.a !== null) {
+  const fh = Number(ff.h), fa = Number(ff.a);
+  if (!isNaN(fh) && !isNaN(fa)) {
+    ff.vmVinnare = fh > fa ? ff.winnerH : ff.winnerA;
+    ff.silver    = fh > fa ? ff.winnerA : ff.winnerH;
+  }
+}
+// Bronsmedaljör: vinnaren av bronsmatch
+const bf = facitResultat['bronze_1'];
+if (bf && bf.h !== null && bf.a !== null) {
+  const bh = Number(bf.h), ba = Number(bf.a);
+  if (!isNaN(bh) && !isNaN(ba)) {
+    bf.brons = bh > ba ? bf.winnerH : bf.winnerA;
+  }
+}
+const nyaGrupptabeller = calculateGroupTables(facitResultat);
+await setDoc(
+    doc(db, 'facit', 'grupper'),
+    nyaGrupptabeller,
+    { merge: true }
+);    
+const snapshot = await getDocs(collection(db, 'tips'));
+const batch = [];
+snapshot.forEach(docSnap => {
+const data        = docSnap.data();
+const predictions = data.predictions || {};
+const bonus       = data.bonus || {};
+let totalPoäng    = 0;
+for (let i = 1; i <= 72; i++) {
+const id    = `m${i}`;
+const tipp  = predictions[id];
+const facit = facitResultat[id];
+if (!tipp || !facit) continue;
+totalPoäng += räknaMatchPoäng(tipp.h, tipp.a, facit.h, facit.a);
+}
+const slutspelsIds = [
+...Array.from({length:16}, (_,i) => `r16_${i+1}`),
+...Array.from({length:8},  (_,i) => `qf_${i+1}`),
+...Array.from({length:4},  (_,i) => `qf2_${i+1}`),
+'semi_1', 'semi_2', 'bronze_1', 'final_1'
+];
+for (const id of slutspelsIds) {
+    const tipp  = predictions[id];
+    const facit = facitResultat[id];
+    if (!tipp || !facit) continue;
+    // Man måste ha rätt lag för att få resultatpoäng
+    const rättLag =
+        tipp.teamH &&
+        tipp.teamA &&
+        facit.winnerH &&
+        facit.winnerA &&
+        tipp.teamH.trim().toLowerCase() ===
+        facit.winnerH.trim().toLowerCase() &&
+        tipp.teamA.trim().toLowerCase() ===
+        facit.winnerA.trim().toLowerCase();
+    if (rättLag) {
+        totalPoäng += räknaMatchPoäng(
+            tipp.h,
+            tipp.a,
+            facit.h,
+            facit.a
+        );
+    }
+}
+totalPoäng += räknaSlutspelslagPoäng(predictions, facitResultat);
+totalPoäng += räknaBonusPoäng(bonus, bonusFacit);
+batch.push({ uid: docSnap.id, poäng: totalPoäng });
+});
+for (const { uid, poäng } of batch) {
+await setDoc(doc(db, 'tips', uid), { poäng }, { merge: true });
+}
+console.log('   ✅    Poäng beräknade och sparade!');
+showToast('Poäng uppdaterade!');
+}
+function renderTopplista() {
+const grid = document.getElementById('topplista-grid');
+if (!grid) return;
+// stäng gammal listener
+if (topplistaListener) {
+  topplistaListener();
+}
+topplistaListener = onSnapshot(
+  collection(db, 'tips'),
+  (snapshot) => {
+const rows = [];
+snapshot.forEach(docSnap => {
+const data = docSnap.data();
+if (docSnap.id === 'sQH9PnqxO3aVsArNKVs7BJiCwwH3') {
+return;
+}
+rows.push({
+namn: data.displayUsername || data.username || data.firstName || 'Okänd',
+poäng: data.poäng ?? 0
+});
+});
+rows.sort((a, b) => b.poäng - a.poäng);
+grid.innerHTML = `
+<table style="width:100%; border-collapse:collapse; font-family:'Barlow Condensed',sans-serif;">
+<thead>
+<tr style="color:var(--gold); font-size:15px; border-bottom:1px solid var(--border);">
+<th style="text-align:left; padding:8px 4px;">#</th>
+<th style="text-align:left; padding:8px 4px;">Namn</th>
+<th style="text-align:right; padding:8px 4px;">Poäng</th>
+</tr>
+</thead>
+<tbody>
+${rows.map((r, i) => `
+<tr style="border-bottom:1px solid rgba(89,213,255,0.08); font-size:16px;">
+<td style="padding:8px 4px; color:var(--text2);">${i + 1}</td>
+<td style="padding:8px 4px; color:var(--text);">${r.namn}</td>
+<td style="padding:8px 4px; text-align:right; color:var(--gold);">${r.poäng}</td>
+</tr>`).join('')}
+</tbody>
+</table>
+`;
+}, (e) => {
+console.error('renderTopplista:', e);
+grid.innerHTML =
+'<p style="color:var(--text2);">Topplistan kunde inte laddas.</p>';
+});
+}
+window.saveBonus = async function(key, value) {
+if (!auth.currentUser) {
+showToast("Du måste logga in för att tippa!", true);
+openModal('authModal');
+return;
+}
+const deadline = new Date('2026-06-11T21:00:00+02:00');
+if (new Date() > deadline) return showToast("Tipsen är låsta!", true);
+if (!window.bonusData) window.bonusData = {};
+window.bonusData[key] = value;
+try {
+await setDoc(
+doc(db, 'tips', auth.currentUser.uid),
+{ bonus: window.bonusData },
+{ merge: true }
+);
+console.log('Bonus sparad');
+} catch(e) {
+console.error('saveBonus:', e);
+alert(
+'Bonus kunde inte sparas:\n' +
+(e.message || e.code)
+);
+}
+};
+function loadBonus(data) {
+const bonus = data.bonus || {};
+['skyttekung','flest_mal','gula_kort','roda_kort','flest_inslapp','sista_mal','total_mal'].forEach(key => {
+const el = document.getElementById('bonus_' + key);
+if (el && bonus[key] !== undefined) el.value = bonus[key];
+});
+window.bonusData = bonus;
+}
+async function exportTipsPDF() {
+const snapshot = await getDocs(collection(db, 'tips'));
+let html = `
+<html>
+<head>
+<title>Alla tips</title>
+<style>
+body{
+font-family:Arial,sans-serif;
+padding:20px;
+}
+h1{
+margin-bottom:20px;
+}
+table{
+width:100%;
+border-collapse:collapse;
+margin-bottom:30px;
+}
+th, td{
+border:1px solid #000;
+padding:6px;
+font-size:12px;
+text-align:center;
+}
+th{
+background:#eee;
+}
+.user-block{
+margin-bottom:40px;
+page-break-inside:avoid;
+}
+</style>
+</head>
+<body>
+<h1>Alla inkomna tips</h1>
+`;
+snapshot.forEach(docSnap => {
+const data = docSnap.data();
+const namn =
+data.username ||
+data.firstName ||
+'Okänd';
+const predictions =
+data.predictions || {};
+html += `
+<div class="user-block">
+<h2>${namn}</h2>
+<table>
+<tr>
+<th>Match</th>
+<th>Tips</th>
+</tr>
+`;
+for(let i = 1; i <= 72; i++){
+const id = `m${i}`;
+const tipp = predictions[id];
+html += `
+<tr>
+<td>${id}</td>
+<td>
+${tipp
+? `${tipp.h} - ${tipp.a}`
+: '-'}
+</td>
+</tr>
+`;
+}
+html += `
+</table>
+</div>
+`;
+});
+html += `
+`;
+const win = window.open('', '_blank');
+win.document.write(html);
+win.document.close();
+win.focus();
+win.print();	
+ }
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+navigator.serviceWorker.register('/VM-by-Bushido-Brown/sw.js');
+  }
+</script>
+</body>
+</html>
