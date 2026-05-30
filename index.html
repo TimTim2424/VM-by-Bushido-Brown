@@ -939,8 +939,27 @@ gruppTabellListener = onSnapshot(
   doc(db, 'facit', 'grupper'),
   (snap) => {
   grid.innerHTML = '';  
-if (!snap.exists()) {
-  // Bygg laglistor från SCHEDULE med nollor
+// Om Firebase har data, använd den — annars visa lag med nollor
+if (snap.exists()) {
+  const data = snap.data();
+  groupTableData = {};
+  for (const _g in data) {
+    const _raw = data[_g];
+    groupTableData[_g] = Array.isArray(_raw)
+      ? _raw.map(x => Object.assign({}, x))
+      : Object.keys(_raw).sort((a,b) => Number(a)-Number(b)).map(k => Object.assign({}, _raw[k]));
+  }
+  for (const g in groupTableData) {
+    groupTableData[g].sort((a, b) => {
+      const pA = Number(a.p) || 0; const pB = Number(b.p) || 0;
+      if (pB !== pA) return pB - pA;
+      const msA = Number(a.ms) || 0; const msB = Number(b.ms) || 0;
+      if (msB !== msA) return msB - msA;
+      const gmA = Number(a.gm) || 0; const gmB = Number(b.gm) || 0;
+      return gmB - gmA;
+    });
+  }
+} else {
   groupTableData = {};
   const allMatches = SCHEDULE.flatMap(d => d.matches);
   for (const grupp in GROUP_MATCHES) {
@@ -955,18 +974,6 @@ if (!snap.exists()) {
     }
     groupTableData[grupp] = lagsInGroup;
   }
-if (snap.exists()) {
-const data = snap.data();
-groupTableData = {}; for (const _g in data) {   const _raw = data[_g];   groupTableData[_g] = Array.isArray(_raw)     ? _raw.map(x => Object.assign({}, x))     : Object.keys(_raw).sort((a,b) => Number(a)-Number(b)).map(k => Object.assign({}, _raw[k])); }
-for (const g in groupTableData) {
-groupTableData[g].sort((a, b) => {
-const pA = Number(a.p) || 0; const pB = Number(b.p) || 0;
-if (pB !== pA) return pB - pA;
-const msA = Number(a.ms) || 0; const msB = Number(b.ms) || 0;
-if (msB !== msA) return msB - msA;
-const gmA = Number(a.gm) || 0; const gmB = Number(b.gm) || 0;
-return gmB - gmA;
-});
 }
 const grupperHTML = Object.entries(GROUP_MATCHES)
 .sort(([a], [b]) => a.localeCompare(b))
@@ -1013,7 +1020,6 @@ return `
 </table>
 </div>`;
 }).join('');
-}
 grid.innerHTML = grupperHTML;
 }, (e) => {
 console.error('renderGrupptabell:', e);
