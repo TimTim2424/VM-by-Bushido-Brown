@@ -557,7 +557,7 @@ K: ['m21','m24','m45','m48','m69','m70'],
 L: ['m22','m23','m46','m47','m67','m68']
 };
 function isAdmin() {
-  return auth.currentUser?.uid === 'sQH9PnqxO3aVsArNKVs7BJiCwwH3';
+  return auth.currentUser?.uid === 'cyXC5nihbeWMHJXPpMwzO5FxtCr1';
 }
 let currentAuthMode = 'login';
 let currentUserProfile = null;
@@ -1173,7 +1173,7 @@ throw new Error("Facit saknas i databasen.");
 const facitResultat = facitSnap.data();
 const bonusFacit    = bonusFacitSnap.exists() ? bonusFacitSnap.data() : {};
 // Ladda adminens inmatade lagnamn för slutspelsmatcher
-const ADMIN_UID = 'sQH9PnqxO3aVsArNKVs7BJiCwwH3';
+const ADMIN_UID = 'cyXC5nihbeWMHJXPpMwzO5FxtCr1';
 const adminSnap = await getDoc(doc(db, 'tips', ADMIN_UID));
 const adminPred = adminSnap.exists() ? (adminSnap.data().predictions || {}) : {};
 // Sätt winnerH/winnerA på varje slutspelsmatch baserat på adminens lagnamn
@@ -1279,7 +1279,7 @@ topplistaListener = onSnapshot(
 const rows = [];
 snapshot.forEach(docSnap => {
 const data = docSnap.data();
-if (docSnap.id === 'sQH9PnqxO3aVsArNKVs7BJiCwwH3') {
+if (docSnap.id === 'cyXC5nihbeWMHJXPpMwzO5FxtCr1') {
 return;
 }
 rows.push({
