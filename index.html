@@ -955,7 +955,7 @@ if (!snap.exists()) {
     }
     groupTableData[grupp] = lagsInGroup;
   }
-} else {
+if (snap.exists()) {
 const data = snap.data();
 groupTableData = {}; for (const _g in data) {   const _raw = data[_g];   groupTableData[_g] = Array.isArray(_raw)     ? _raw.map(x => Object.assign({}, x))     : Object.keys(_raw).sort((a,b) => Number(a)-Number(b)).map(k => Object.assign({}, _raw[k])); }
 for (const g in groupTableData) {
@@ -1013,7 +1013,7 @@ return `
 </table>
 </div>`;
 }).join('');
-} // end else
+}
 grid.innerHTML = grupperHTML;
 }, (e) => {
 console.error('renderGrupptabell:', e);
