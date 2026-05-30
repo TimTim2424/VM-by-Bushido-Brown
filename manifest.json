@@ -1,11 +1,12 @@
 {
-  "name": "Förvaltningsavdelningens VM-Tips 2026",
-  "short_name": "VM-Tips 2026",
-  "description": "Tipsa om VM 2026 tillsammans med kollegorna!",
-  "start_url": "/",
+  "name": "VM 2026 by Bushido Brown",
+  "short_name": "Bushido Brown",
+  "description": "Tipsa om VM 2026!",
+  "start_url": "/VM-by-Bushido-Brown/",
+  "scope": "/VM-by-Bushido-Brown/",
   "display": "standalone",
-  "background_color": "#08111f",
-  "theme_color": "#59D5FF",
+  "background_color": "#0f0f1a",
+  "theme_color": "#e0c97f",
   "orientation": "portrait-primary",
   "icons": [
     {
