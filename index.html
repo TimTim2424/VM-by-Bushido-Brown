@@ -940,9 +940,22 @@ gruppTabellListener = onSnapshot(
   (snap) => {
   grid.innerHTML = '';  
 if (!snap.exists()) {
-  grid.innerHTML = '<p style="color:var(--text2);">Ingen data ännu – turneringen har inte börjat.</p>';
-  return;
-}
+  // Bygg laglistor från SCHEDULE med nollor
+  groupTableData = {};
+  const allMatches = SCHEDULE.flatMap(d => d.matches);
+  for (const grupp in GROUP_MATCHES) {
+    const matchIds = GROUP_MATCHES[grupp];
+    const lagsInGroup = [];
+    const seen = new Set();
+    for (const mid of matchIds) {
+      const m = allMatches.find(x => x.id === mid);
+      if (!m) continue;
+      if (!seen.has(m.h)) { seen.add(m.h); lagsInGroup.push({ lag: m.h, s:0, v:0, o:0, f:0, gm:0, im:0, ms:0, p:0 }); }
+      if (!seen.has(m.a)) { seen.add(m.a); lagsInGroup.push({ lag: m.a, s:0, v:0, o:0, f:0, gm:0, im:0, ms:0, p:0 }); }
+    }
+    groupTableData[grupp] = lagsInGroup;
+  }
+} else {
 const data = snap.data();
 groupTableData = {}; for (const _g in data) {   const _raw = data[_g];   groupTableData[_g] = Array.isArray(_raw)     ? _raw.map(x => Object.assign({}, x))     : Object.keys(_raw).sort((a,b) => Number(a)-Number(b)).map(k => Object.assign({}, _raw[k])); }
 for (const g in groupTableData) {
@@ -1000,6 +1013,7 @@ return `
 </table>
 </div>`;
 }).join('');
+} // end else
 grid.innerHTML = grupperHTML;
 }, (e) => {
 console.error('renderGrupptabell:', e);
