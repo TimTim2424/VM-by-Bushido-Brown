@@ -428,6 +428,25 @@ appId: "1:455999705720:web:42f745fbfa4fc909f9538d"
 const fbApp = initializeApp(firebaseConfig);
 const auth = getAuth(fbApp);
 const db = getFirestore(fbApp);
+
+// Initialisera facit/resultat med alla 104 matcher om det inte finns
+async function initFacitResultat() {
+  const facitRef = doc(db, 'facit', 'resultat');
+  const facitSnap = await getDoc(facitRef);
+  const existing = facitSnap.exists() ? facitSnap.data() : {};
+  const allMatchIds = [];
+  for (let i = 1; i <= 104; i++) allMatchIds.push('m' + i);
+  // Slutspelsmatcher
+  const extraIds = ['r16_1','r16_2','r16_3','r16_4','r16_5','r16_6','r16_7','r16_8',
+    'qf_1','qf_2','qf_3','qf_4','semi_1','semi_2','bronze_1','final_1'];
+  const allIds = [...allMatchIds, ...extraIds];
+  let needsUpdate = false;
+  for (const id of allIds) {
+    if (!existing[id]) { existing[id] = {h: null, a: null}; needsUpdate = true; }
+  }
+  if (needsUpdate) await setDoc(facitRef, existing);
+}
+initFacitResultat().catch(e => console.error('initFacitResultat:', e));
 const flagCodes = {
 'Mexiko': 'mx', 'Sydafrika': 'za', 'Sydkorea': 'kr', 'Tjeckien': 'cz', 'Kanada': 'ca',
 'Bosnien & Herr.': 'ba', 'USA': 'us', 'Paraguay': 'py', 'Qatar': 'qa', 'Schweiz': 'ch',
