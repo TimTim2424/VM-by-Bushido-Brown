@@ -446,7 +446,7 @@ async function initFacitResultat() {
   }
   if (needsUpdate) await setDoc(facitRef, existing);
 }
-initFacitResultat().catch(e => console.error('initFacitResultat:', e));
+
 const flagCodes = {
 'Mexiko': 'mx', 'Sydafrika': 'za', 'Sydkorea': 'kr', 'Tjeckien': 'cz', 'Kanada': 'ca',
 'Bosnien & Herr.': 'ba', 'USA': 'us', 'Paraguay': 'py', 'Qatar': 'qa', 'Schweiz': 'ch',
@@ -852,6 +852,7 @@ document.getElementById('userBadge').style.display = 'block';
 document.getElementById('loginBtn').style.display = 'none';
 document.getElementById('logoutBtn').style.display = 'block';
 if (isAdmin()) {
+initFacitResultat().catch(e => console.error('initFacitResultat:', e));
 const adminBtn = document.createElement('button');
 adminBtn.textContent = '   🔧    Uppdatera poäng';
 adminBtn.className = 'btn';
