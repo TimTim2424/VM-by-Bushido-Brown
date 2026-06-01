@@ -593,6 +593,7 @@ function autoSave() {
         predictions,
         bonus: window.bonusData || {},
         username: currentUserProfile?.username || auth.currentUser.email,
+        displayUsername: currentUserProfile?.displayUsername || currentUserProfile?.username || auth.currentUser.email,
         firstName: currentUserProfile?.firstName || '',
         lastName: currentUserProfile?.lastName || ''
       }, { merge: true });
@@ -830,6 +831,7 @@ window.saveTips = async () => {
       predictions,
       bonus: window.bonusData || {},
       username: currentUserProfile?.username || auth.currentUser.email,
+      displayUsername: currentUserProfile?.displayUsername || currentUserProfile?.username || auth.currentUser.email,
       firstName: currentUserProfile?.firstName || '',
       lastName: currentUserProfile?.lastName || ''
     }, { merge: true });
