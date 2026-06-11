@@ -587,7 +587,7 @@ function autoSave() {
   autoSaveTimer = setTimeout(async () => {
     if (!auth.currentUser) return;
     const deadline = new Date('2026-06-11T21:00:00+02:00');
-    if (new Date() > deadline) return;
+    if (new Date() > deadline && !isAdmin()) return;
     try {
       await setDoc(doc(db, 'tips', auth.currentUser.uid), {
         predictions,
@@ -616,7 +616,7 @@ function renderGroups() {
 const container = document.getElementById('schedule-grid');
 if(!container) return;
 const deadline = new Date('2026-06-11T21:00:00');
-const isLocked = new Date() > deadline;
+const isLocked = new Date() > deadline && !isAdmin();
 container.innerHTML = SCHEDULE.map(day => `
 <div class="date-divider">${day.date}</div>
 ${day.matches.map(m => {
@@ -649,7 +649,7 @@ function renderGenericSlutspel(scheduleData, containerId) {
 const container = document.getElementById(containerId);
 if (!container) return;
 const deadline = new Date('2026-06-11T21:00:00');
-const isLocked = new Date() > deadline;
+const isLocked = new Date() > deadline && !isAdmin();
 container.innerHTML = scheduleData.map(day => `
 <div class="date-divider">${day.date}</div>
 ${day.matches.map(m => {
@@ -825,7 +825,7 @@ window.saveTips = async () => {
     return openModal('authModal');
   }
   const deadline = new Date('2026-06-11T21:00:00+02:00');
-  if (new Date() > deadline) return showToast("Tipsen är låsta!", true);
+ if (!isAdmin() && new Date() > deadline) return showToast("Tipsen är låsta!", true);
   try {
     await setDoc(doc(db, 'tips', auth.currentUser.uid), {
       predictions,
@@ -1362,7 +1362,7 @@ openModal('authModal');
 return;
 }
 const deadline = new Date('2026-06-11T21:00:00+02:00');
-if (new Date() > deadline) return showToast("Tipsen är låsta!", true);
+if (!isAdmin() && new Date() > deadline) return showToast("Tipsen är låsta!", true);
 if (!window.bonusData) window.bonusData = {};
 window.bonusData[key] = value;
 try {
