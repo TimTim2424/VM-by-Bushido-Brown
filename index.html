@@ -284,7 +284,6 @@ margin: 0;
 <button id="nav-bronze" onclick="showPage('bronze', this)">Bronsmatch</button>
 <button id="nav-final" onclick="showPage('final', this)">VM-Final</button>
 <button id="nav-bonus" onclick="showPage('bonus', this)">   ⭐    Bonus & Tiebreak</button>
-<button id="nav-statistik" onclick="showPage('statistik', this)">   📊    Lagstatistik</button>
 </div>
 </nav>
 <div class="container">
@@ -386,13 +385,6 @@ onchange="saveBonus('sista_mal', this.value)">
 <input type="number" id="bonus_total_mal" placeholder="Antal mål..."
 onchange="saveBonus('total_mal', this.value)">
 </div>
-</div>
-</div>
-<div class="page" id="page-statistik">
-<div class="page-title">Lagstatistik</div>
-<div class="page-sub">Vilka lag deltagarna har tippat går vidare</div>
-<div id="statistik-grid">
-<p style="color:var(--text2); font-size:14px;">Laddar statistik...</p>
 </div>
 </div>
 <div class="footer">
@@ -923,7 +915,6 @@ else if (tabId === 'qf2') renderGenericSlutspel(SCHEDULE_QF2, 'schedule-qf2-grid
 else if (tabId === 'semi') renderGenericSlutspel(SCHEDULE_SEMI, 'schedule-semi-grid');
 else if (tabId === 'bronze') renderGenericSlutspel(SCHEDULE_BRONZE, 'schedule-bronze-grid');
 else if (tabId === 'final') renderGenericSlutspel(SCHEDULE_FINAL, 'schedule-final-grid');
-else if (tabId === 'statistik') renderStatistik();
 }
 window.showPage = (id, btn) => {
 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1363,93 +1354,6 @@ console.error('renderTopplista:', e);
 grid.innerHTML =
 '<p style="color:var(--text2);">Topplistan kunde inte laddas.</p>';
 });
-}
-// Räknar ihop lagnamn oavsett stor/liten bokstav och extra mellanslag,
-// men visar det första skrivsättet som dök upp som etikett.
-function countTeams(teamList) {
-const counts = {}; // normaliserad nyckel -> antal
-const labels = {};  // normaliserad nyckel -> visningsnamn
-for (const team of teamList) {
-const trimmed = (team || '').trim().replace(/\s+/g, ' ');
-if (!trimmed) continue;
-const key = trimmed.toLowerCase();
-counts[key] = (counts[key] || 0) + 1;
-if (!labels[key]) labels[key] = trimmed;
-}
-return Object.entries(counts)
-.map(([key, count]) => [labels[key], count])
-.sort((a, b) => b[1] - a[1]);
-}
-async function renderStatistik() {
-const container = document.getElementById('statistik-grid');
-if (!container) return;
-container.innerHTML = '<p style="color:var(--text2); font-size:14px;">Laddar statistik...</p>';
-try {
-const snapshot = await getDocs(collection(db, 'tips'));
-const allPredictions = [];
-const allWinners = [];
-snapshot.forEach(docSnap => {
-if (docSnap.id === 'cyXC5nihbeWMHJXPpMwzO5FxtCr1') return; // hoppa över admin
-const data = docSnap.data();
-allPredictions.push(data.predictions || {});
-const winner = data.predictions?.winner?.teamH;
-if (winner && winner.trim()) allWinners.push(winner);
-});
-const rounds = [
-{ title: '16-delsfinaler',   schedule: SCHEDULE_R16 },
-{ title: 'Åttondelsfinaler', schedule: SCHEDULE_QF },
-{ title: 'Kvartsfinaler',    schedule: SCHEDULE_QF2 },
-{ title: 'Semifinaler',      schedule: SCHEDULE_SEMI },
-{ title: 'Bronsmatch',       schedule: SCHEDULE_BRONZE },
-{ title: 'VM-Final',         schedule: SCHEDULE_FINAL }
-];
-let html = '';
-// VM-vinnare överst
-const winnerCounts = countTeams(allWinners);
-html += `<div class="group-section"><div class="group-label">   🏆    VM-vinnare (deltagarnas tips)</div>`;
-html += `
-<div class="match-card">
-<div class="match-row" style="flex-direction:column; align-items:flex-start; gap:6px;">
-<div style="font-size:13px; color:var(--text2);">
-${winnerCounts.length
-? winnerCounts.map(([team, count]) => `${team}: ${count}`).join(' &nbsp;|&nbsp; ')
-: 'Inga tips ännu'}
-</div>
-</div>
-</div>`;
-html += `</div>`;
-for (const round of rounds) {
-html += `<div class="group-section"><div class="group-label">${round.title}</div>`;
-for (const day of round.schedule) {
-for (const m of day.matches) {
-const teams = [];
-for (const preds of allPredictions) {
-const tipp = preds[m.id];
-if (!tipp) continue;
-if (tipp.teamH) teams.push(tipp.teamH);
-if (tipp.teamA) teams.push(tipp.teamA);
-}
-const sorted = countTeams(teams);
-html += `
-<div class="match-card">
-<div class="match-row" style="flex-direction:column; align-items:flex-start; gap:6px;">
-<div class="match-teams">${m.h} – ${m.a}</div>
-<div style="font-size:13px; color:var(--text2);">
-${sorted.length
-? sorted.map(([team, count]) => `${team}: ${count}`).join(' &nbsp;|&nbsp; ')
-: 'Inga tips ännu'}
-</div>
-</div>
-</div>`;
-}
-}
-html += `</div>`;
-}
-container.innerHTML = html;
-} catch(e) {
-console.error('renderStatistik:', e);
-container.innerHTML = '<p style="color:var(--text2);">Statistiken kunde inte laddas.</p>';
-}
 }
 window.saveBonus = async function(key, value) {
 if (!auth.currentUser) {
