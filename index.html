@@ -412,6 +412,24 @@ onchange="saveBonus('total_mal', this.value)">
 </div>
 </div>
 </div>
+<div class="modal" id="adminJusteraModal">
+  <div class="modal-content">
+    <div style="margin-bottom:14px;">
+      <div class="page-title" style="font-size:18px;">✏️ Justera poäng manuellt</div>
+      <p style="font-size:13px; color:var(--text2); margin-top:4px;">Lägg till eller dra av poäng för en deltagare. Ange negativt tal för att dra av.</p>
+    </div>
+    <select id="adminJusteraUser" class="input-field" style="margin-bottom:4px;">
+      <option value="">Välj deltagare...</option>
+    </select>
+    <input type="number" id="adminJusteraDelta" class="input-field" placeholder="Poäng att lägga till (t.ex. 5 eller -3)">
+    <p id="adminJusteraInfo" style="font-size:12px; color:var(--text2); margin:8px 0; min-height:18px;"></p>
+    <div style="display:flex; gap:10px; margin-top:14px;">
+      <button class="btn primary" onclick="adminSparaJustering()">Spara</button>
+      <button class="btn" onclick="closeModal('adminJusteraModal')">Avbryt</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast" class="toast"></div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -861,12 +879,12 @@ adminBtn.className = 'btn';
 adminBtn.style.marginLeft = '10px';
 adminBtn.onclick = updateAllScores;
 document.querySelector('.footer').appendChild(adminBtn);
-const pdfBtn = document.createElement('button');
-pdfBtn.textContent = ' 📄 Exportera PDF';
-pdfBtn.className = 'btn';
-pdfBtn.style.marginLeft = '10px';
-pdfBtn.onclick = exportTipsPDF;
-document.querySelector('.footer').appendChild(pdfBtn);
+const justeraBtn = document.createElement('button');
+justeraBtn.textContent = '✏️ Justera poäng';
+justeraBtn.className = 'btn';
+justeraBtn.style.marginLeft = '10px';
+justeraBtn.onclick = () => adminÖppnaJustera();
+document.querySelector('.footer').appendChild(justeraBtn);
 }
 const brytpunkt = new Date('2026-06-12T01:00:00+02:00');
 const nu = new Date();
@@ -1388,87 +1406,53 @@ if (el && bonus[key] !== undefined) el.value = bonus[key];
 });
 window.bonusData = bonus;
 }
-async function exportTipsPDF() {
-const snapshot = await getDocs(collection(db, 'tips'));
-let html = `
-<html>
-<head>
-<title>Alla tips</title>
-<style>
-body{
-font-family:Arial,sans-serif;
-padding:20px;
-}
-h1{
-margin-bottom:20px;
-}
-table{
-width:100%;
-border-collapse:collapse;
-margin-bottom:30px;
-}
-th, td{
-border:1px solid #000;
-padding:6px;
-font-size:12px;
-text-align:center;
-}
-th{
-background:#eee;
-}
-.user-block{
-margin-bottom:40px;
-page-break-inside:avoid;
-}
-</style>
-</head>
-<body>
-<h1>Alla inkomna tips</h1>
-`;
-snapshot.forEach(docSnap => {
-const data = docSnap.data();
-const namn =
-data.username ||
-data.firstName ||
-'Okänd';
-const predictions =
-data.predictions || {};
-html += `
-<div class="user-block">
-<h2>${namn}</h2>
-<table>
-<tr>
-<th>Match</th>
-<th>Tips</th>
-</tr>
-`;
-for(let i = 1; i <= 72; i++){
-const id = `m${i}`;
-const tipp = predictions[id];
-html += `
-<tr>
-<td>${id}</td>
-<td>
-${tipp
-? `${tipp.h} - ${tipp.a}`
-: '-'}
-</td>
-</tr>
-`;
-}
-html += `
-</table>
-</div>
-`;
-});
-html += `
-`;
-const win = window.open('', '_blank');
-win.document.write(html);
-win.document.close();
-win.focus();
-win.print();	
- }
+window.adminÖppnaJustera = async function() {
+  const snapshot = await getDocs(collection(db, 'tips'));
+  const select = document.getElementById('adminJusteraUser');
+  select.innerHTML = '<option value="">Välj deltagare...</option>';
+
+  const alternativ = [];
+  snapshot.forEach(docSnap => {
+    if (docSnap.id === 'sQH9PnqxO3aVsArNKVs7BJiCwwH3') return;
+    const data = docSnap.data();
+    const namn = data.displayUsername || data.username || data.firstName || 'Okänd';
+    alternativ.push({ uid: docSnap.id, namn, poäng: data.poäng ?? 0 });
+  });
+
+  alternativ.sort((a, b) => a.namn.localeCompare(b.namn, 'sv'));
+  alternativ.forEach(({ uid, namn, poäng }) => {
+    const opt = document.createElement('option');
+    opt.value = uid;
+    opt.textContent = `${namn} (${poäng} p)`;
+    select.appendChild(opt);
+  });
+
+  document.getElementById('adminJusteraDelta').value = '';
+  document.getElementById('adminJusteraInfo').textContent = '';
+  openModal('adminJusteraModal');
+};
+
+window.adminSparaJustering = async function() {
+  const uid = document.getElementById('adminJusteraUser').value;
+  const delta = parseInt(document.getElementById('adminJusteraDelta').value);
+  const infoEl = document.getElementById('adminJusteraInfo');
+
+  if (!uid) { showToast('Välj en deltagare!', true); return; }
+  if (isNaN(delta)) { showToast('Ange ett giltigt poängtal!', true); return; }
+
+  try {
+    const ref = doc(db, 'tips', uid);
+    const snap = await getDoc(ref);
+    const nuPoäng = snap.exists() ? (snap.data().poäng ?? 0) : 0;
+    const nyaPoäng = nuPoäng + delta;
+    await setDoc(ref, { poäng: nyaPoäng }, { merge: true });
+    showToast(`Klart! ${nuPoäng} → ${nyaPoäng} poäng`);
+    closeModal('adminJusteraModal');
+  } catch(e) {
+    console.error('adminSparaJustering:', e);
+    showToast('Kunde inte spara justering: ' + (e.message || e.code), true);
+  }
+};
 </script>
 <script>
 if ('serviceWorker' in navigator) {
